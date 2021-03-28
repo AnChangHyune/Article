@@ -20,8 +20,8 @@ public class ArticleController {
 	public ArticleController() {
 		articles = new ArrayList<>();
 		
-		articles.add(new Article(++articleLastId,"2021.12.12","2021.12.12","제목1","내용1"));
-		articles.add(new Article(++articleLastId,"2021.12.12","2021.12.12","제목2","내용2"));
+		articles.add(new Article(++articleLastId,Util.getRegDate(),Util.getRegDate(),"제목1","내용1"));
+		articles.add(new Article(++articleLastId,Util.getRegDate(),Util.getRegDate(),"제목2","내용2"));
 	}
 	
 	@RequestMapping("usr/article/detail")
@@ -73,4 +73,19 @@ public class ArticleController {
 		}
 		return false;
 	} 
+	@RequestMapping("usr/article/doModify")
+	@ResponseBody
+	public Map<String,Object> showdoModify(int id,String title, String body){
+		Article selArticle = null;
+		
+		for(Article article : articles) {
+			if(article.getId() == id) {
+				selArticle = article;
+				break;
+			}
+		}
+		Map<String, Object> rs = new HashMap<>();
+		
+		return;
+	}
 }
