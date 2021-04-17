@@ -16,10 +16,8 @@ import com.sbs.untactTeacher.dto.ResultData;
 import com.sbs.untactTeacher.service.ArticleService;
 import com.sbs.untactTeacher.util.Util;
 
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@Slf4j
 public class MpaUsrArticleController {
 
 	@Autowired
@@ -39,16 +37,17 @@ public class MpaUsrArticleController {
 
 	@RequestMapping("/mpaUsr/article/doWrite")
 	@ResponseBody
-	public ResultData doWrite(String title, String body) {
+	public ResultData doWrite(HttpServletRequest req, String title, String body) {
 
 		if (Util.isEmpty(title)) {
-			return new ResultData("F-1", "제목을 입력해주세요.");
+			return new ResultData("F-2", "제목을 입력해주세요.");
 		}
 
 		if (Util.isEmpty(body)) {
-			return new ResultData("F-2", "내용을 입력해주세요.");
+			return new ResultData("F-3", "내용을 입력해주세요.");
 		}
-
+		
+		
 		return articleService.writeArticle(title, body);
 	}
 
@@ -136,7 +135,7 @@ public class MpaUsrArticleController {
 
 	@RequestMapping("/mpaUsr/article/getArticle")
 	@ResponseBody
-	public ResultData getArticle(Integer id) {
+	public ResultData getArticle(HttpServletRequest req, Integer id) {
 		if (Util.isEmpty(id)) {
 			return new ResultData("F-1", "번호를 입력해주세요.");
 		}
@@ -148,5 +147,18 @@ public class MpaUsrArticleController {
 		}
 
 		return new ResultData("S-1", article.getId() + "번 글 입니다.", "article", article);
+	}
+	
+	@RequestMapping("/mpaUsr/article/write")
+	public String showWrite(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId) {
+		Board board = articleService.getBoardById(boardId);
+
+		if (board == null) {
+			return msgAndBack(req, boardId + "번 게시판이 존재하지 않습니다.");
+		}
+
+		req.setAttribute("board", board);
+
+		return "mpaUsr/article/write";
 	}
 }
